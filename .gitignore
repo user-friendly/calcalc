@@ -1,0 +1,3 @@
+/node_modules/
+# Should be outside the app root
+/sslcert/*
