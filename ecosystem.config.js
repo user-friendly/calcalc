@@ -2,7 +2,9 @@ module.exports = {
   apps : [{
     name:           "Calorie Calculator",
     script:         "./app.js",
-    watch: true,
+    watch:          true,
+    
+    interpreter_args: "--inspect",
     
     pid_file:       "./pm2/app.pid",
     error_log:      "./pm2/app_error.log",

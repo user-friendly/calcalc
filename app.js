@@ -17,8 +17,48 @@ const {TwingEnvironment, TwingLoaderFilesystem} = require('twing');
 let loader = new TwingLoaderFilesystem('./templates');
 let twing = new TwingEnvironment(loader);
 
+app.use('/css', express.static('public/css'))
+app.use('/images', express.static('public/images'))
+
+app.use(express.urlencoded({extended: true}))
+
 app.get('/', (req, res) => {
-    twing.render('index.twig', {'name': 'World'}).then((output) => {
+    twing.render('index.twig', {'form_text': ""}).then((output) => {
+        res.end(output);
+    })
+})
+
+app.post('/', (req, res) => {
+    let context = {
+        form_text: req.body.text,
+        data: [],
+    };
+    
+    let parser = /(?<quantity>\d+)\s*(?:x\s*(?<multiplier>\d+)\s*)?(?<unit>cal|kj)(?:\s*(?:-|:)\s*)(?<item>[^,;\n]+)/gi
+    
+    let data = []
+    
+    var entry = null;
+    for (let record of req.body.text.matchAll(parser)) {
+        entry = {
+            label:          record.groups.item,
+            displayLabel:   record.groups.item,
+            quantity:       Number(record.groups.quantity),
+            multiplier:     Number(record.groups.multiplier ?? 1),
+            unit:           record.groups.unit
+        }
+        
+        if (entry.displayLabel.length > 64) {
+            entry.displayLabel = entry.displayLabel.substring(0, 61)
+            entry.displayLabel += '...'
+        }
+        
+        data.push(entry)
+    }
+    
+    context.data = data
+    
+    twing.render('index.twig', context).then((output) => {
         res.end(output);
     })
 })
