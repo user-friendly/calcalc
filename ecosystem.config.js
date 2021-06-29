@@ -3,6 +3,7 @@ module.exports = {
     name:           "Calorie Calculator",
     script:         "./app.js",
     watch:          true,
+    watch_delay:    250,
     
     interpreter_args: "--inspect",
     

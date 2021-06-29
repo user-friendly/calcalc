@@ -3,6 +3,8 @@
  * Application entry point.
  */
 
+'use strict';
+
 const fs = require('fs')
 const express = require('express')
 const https = require('https')
@@ -11,11 +13,16 @@ const appHttp = express()
 const app = express()
 const port = 80
 const portSsl = 443
-
 const {TwingEnvironment, TwingLoaderFilesystem} = require('twing');
+const ListParser = require('./core/ListParser')
 
 let loader = new TwingLoaderFilesystem('./templates');
 let twing = new TwingEnvironment(loader);
+
+let httpsOptions = {
+  key: fs.readFileSync('./sslcert/calcalc.key'),
+  cert: fs.readFileSync('./sslcert/calcalc.crt')
+}
 
 app.use('/css', express.static('public/css'))
 app.use('/images', express.static('public/images'))
@@ -34,29 +41,9 @@ app.post('/', (req, res) => {
         data: [],
     };
     
-    let parser = /(?<quantity>\d+)\s*(?:x\s*(?<multiplier>\d+)\s*)?(?<unit>cal|kj)(?:\s*(?:-|:)\s*)(?<item>[^,;\n]+)/gi
+    let listParser = new ListParser()
     
-    let data = []
-    
-    var entry = null;
-    for (let record of req.body.text.matchAll(parser)) {
-        entry = {
-            label:          record.groups.item,
-            displayLabel:   record.groups.item,
-            quantity:       Number(record.groups.quantity),
-            multiplier:     Number(record.groups.multiplier ?? 1),
-            unit:           record.groups.unit
-        }
-        
-        if (entry.displayLabel.length > 64) {
-            entry.displayLabel = entry.displayLabel.substring(0, 61)
-            entry.displayLabel += '...'
-        }
-        
-        data.push(entry)
-    }
-    
-    context.data = data
+    context.data = listParser.parse(req.body.text)
     
     twing.render('index.twig', context).then((output) => {
         res.end(output);
@@ -72,9 +59,6 @@ http.createServer(appHttp).listen(port, () => {
 })
 
 // Actual app server is secure.
-https.createServer({
-  key: fs.readFileSync('./sslcert/calcalc.key'),
-  cert: fs.readFileSync('./sslcert/calcalc.crt')
-}, app).listen(portSsl, () => {
+https.createServer(httpsOptions, app).listen(portSsl, () => {
     console.log(`HTTPS server listening on https://localhost:${portSsl}`)
 })
