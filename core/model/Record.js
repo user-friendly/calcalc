@@ -17,13 +17,16 @@ module.exports = class Record {
     #unitOriginal
     // Number of items
     #quantity
+    // Record's entry date
+    #date
     
-    constructor(name, energy, unit = 'cal', quantity = 1, label = name) {
+    constructor(name, energy, unit = 'cal', quantity = 1, label = name, date = new Date()) {
         this.#name = name
         this.#label = label
         this.#energy = Number(energy)
         this.#unitOriginal = unit
         this.#quantity = Number(quantity)
+        this.#date = date
         
         // TODO Validate unit and do conversion to non-joule energy to joule
         //      energy.
@@ -49,6 +52,10 @@ module.exports = class Record {
         return this.#unitOriginal
     }
     
+    get date() {
+        return this.#date
+    }
+    
     toString() {
         return `Record {
     name:     ${this.#name},
@@ -56,6 +63,7 @@ module.exports = class Record {
     energy:   ${this.#energy},
     unit:     ${this.#unitOriginal},
     quantity: ${this.#quantity},
+    date:     ${this.#date}
 }`
     }
 }
