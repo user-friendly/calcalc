@@ -1,21 +1,28 @@
 module.exports = {
   apps : [{
-    name:           "Calorie Calculator",
+    name:           "calcalc",
     script:         "./app.js",
     watch:          true,
-    watch_delay:    250,
+    // What does this exactly do?
+    // watch_delay:    250,
     
-    interpreter_args: "--inspect",
+    exp_backoff_restart_delay: 100,
+    autorestart:    false,
+    
     
     pid_file:       "./pm2/app.pid",
-    error_log:      "./pm2/app_error.log",
+    error_file:     "./pm2/app_error.log",
     out_file:       "./pm2/app_out.log",
     
-    env: {
-      NODE_ENV:     "development",
+    env_dev: {
+        NODE_ENV:     "development",
+        interpreter_args: "--inspect",
+    },
+    env_test: {
+        NODE_ENV:     "test",
     },
     env_production: {
-      NODE_ENV:     "production",
+        NODE_ENV:     "production",
     }
   }]
 }
