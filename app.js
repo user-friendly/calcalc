@@ -37,13 +37,27 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) => {
     let context = {
-        form_text: req.body.text,
-        data: [],
+        form_text:  req.body.text,
+        records:    [],
+        total:      0
     };
     
     let listParser = new ListParser()
+    let tmpRecord = null
+    let totalEnergy = 0
     
-    context.data = listParser.parse(req.body.text)
+    for(let record of listParser.parse(req.body.text)) {
+        tmpRecord = {
+            label:    (record.label.length > 64)
+                          ? record.label.substring(0, 61) + '...'
+                          : record.label,
+            energy:   record.energy,
+            quantity: record.quantity
+        }
+        totalEnergy += tmpRecord.energy * tmpRecord.quantity
+        context.records.push(tmpRecord)
+    }
+    context.total = totalEnergy
     
     twing.render('index.twig', context).then((output) => {
         res.end(output);

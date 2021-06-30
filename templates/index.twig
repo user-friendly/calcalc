@@ -19,26 +19,28 @@
                 <input id="calcalc-parser-submit" name="submit" type="submit" name="Parse" />
 			</form>
 		</div>
-		{%  if data|length > 0 %}
+		{%  if records|length > 0 %}
 		<div>
-		    <table>
+		    <table id="calcalc-parsed-data">
 		      <thead>
 		          <tr>
 		              <td>Name</td>
+		              <td>Energy (cal)</td>
 		              <td>Quantity</td>
-		              <td>Multiplier</td>
-		              <td>Units</td>
 		          </tr>
 		      </thead>
 		      <tbody>
-    		      {% for entry in data %}
+    		      {% for record in records %}
     		      <tr>
-    		          <td>{{ entry.displayLabel }}</td>
-    		          <td>{{ entry.quantity }}</td>
-    		          <td>{{ entry.multiplier }}</td>
-    		          <td>{{ entry.unit }}</td>
+    		          <td>{{ record.label }}</td>
+    		          <td>{{ record.energy }}</td>
+    		          <td>{{ record.quantity }}</td>
     		      </tr>
     		      {% endfor %}
+    		      <tr>
+    		          <td class="aggregate">Total energy</td>
+    		          <td class="aggregate" colspan="2">{{ total }}
+    		      </tr>
 		      </tbody>
 		    </table>
 		</div>

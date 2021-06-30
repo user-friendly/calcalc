@@ -37,3 +37,7 @@ form#calcalc-parser input#calcalc-parser-submit {
 	width: 10vw;
 	margin: 1.5vh 1.5vw;
 }
+
+table#calcalc-parsed-data td.aggregate {
+	border-top: 1px solid black;
+}
