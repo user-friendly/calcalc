@@ -13,6 +13,10 @@ module.exports = class ListParser {
     // Comments eraser
     #comment = /\/\/.*|\/\*[^*]*\*\//gi
     
+    constructor() {
+        console.log('ListParser created.')
+    }
+    
     parse(text) {
         text = text.replace(this.#comment, '')
         var data = []

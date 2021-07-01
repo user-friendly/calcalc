@@ -9,12 +9,14 @@ module.exports = {
     exp_backoff_restart_delay: 100,
     autorestart:    false,
     
+    interpreter_args: "--inspect",
     
     pid_file:       "./pm2/app.pid",
     error_file:     "./pm2/app_error.log",
     out_file:       "./pm2/app_out.log",
     
-    env_dev: {
+    // FIXME Does not get applied when calling pm2 --env development
+    env_development: {
         NODE_ENV:     "development",
         interpreter_args: "--inspect",
     },

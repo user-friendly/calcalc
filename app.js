@@ -7,17 +7,13 @@
 
 const fs = require('fs')
 const express = require('express')
+const routes = require('./core/route/routes')
 const https = require('https')
 const http = require('http')
 const appHttp = express()
 const app = express()
 const port = 80
 const portSsl = 443
-const {TwingEnvironment, TwingLoaderFilesystem} = require('twing');
-const ListParser = require('./core/ListParser')
-
-let loader = new TwingLoaderFilesystem('./templates');
-let twing = new TwingEnvironment(loader);
 
 let httpsOptions = {
   key: fs.readFileSync('./sslcert/calcalc.key'),
@@ -27,42 +23,9 @@ let httpsOptions = {
 app.use('/css', express.static('public/css'))
 app.use('/images', express.static('public/images'))
 
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }))
 
-app.get('/', (req, res) => {
-    twing.render('index.twig', {'form_text': ""}).then((output) => {
-        res.end(output);
-    })
-})
-
-app.post('/', (req, res) => {
-    let context = {
-        form_text:  req.body.text,
-        records:    [],
-        total:      0
-    };
-    
-    let listParser = new ListParser()
-    let tmpRecord = null
-    let totalEnergy = 0
-    
-    for(let record of listParser.parse(req.body.text)) {
-        tmpRecord = {
-            label:    (record.label.length > 64)
-                          ? record.label.substring(0, 61) + '...'
-                          : record.label,
-            energy:   record.energy,
-            quantity: record.quantity
-        }
-        totalEnergy += tmpRecord.energy * tmpRecord.quantity
-        context.records.push(tmpRecord)
-    }
-    context.total = totalEnergy
-    
-    twing.render('index.twig', context).then((output) => {
-        res.end(output);
-    })
-})
+routes(app)
 
 // Redirect all non-secure traffic to HTTPS.
 appHttp.all('*', (req, res) => {
