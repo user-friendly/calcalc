@@ -5,9 +5,17 @@
 
 'use strict'
 
-let index = require('./index')
+// Homepage router.
+const index = require('./index')
+
+const notfound = require('./404')
+const error = require('../middleware/error')
 
 module.exports = (app) => {
-    // Index page router.
     app.use(index)
+    
+    // 404 page router is second to last.
+    app.use(notfound)
+    // Error handlers are always last.
+    error(app)
 }

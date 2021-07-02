@@ -9,12 +9,18 @@ const ListParser = require('../ListParser')
 
 let listParser = new ListParser()
 
+// FIXME Remove example.
+//class ControllerError extends Error {}
+
 class IndexController {
     constructor() {
         console.log("IndexController created.")
     }
     
     get(req, res, next) {
+        // FIXME Remove example.
+        // throw new ControllerError('Index controller hic-up!')
+        
         res.locals.templateContext = {'form_text': ""}
         next()
     }

@@ -18,19 +18,19 @@ const render = (req, res, next) => {
     if (!['GET', 'POST'].includes(req.method)) {
         res.status(400).send('Bad Request')
     }
-    
-    twing
-        .render('index.twig', res.locals.templateContext)
-        .then((output) => {
-            res.end(output);
-        })
+    else {
+        twing
+            .render('index.twig', res.locals.templateContext)
+            .then((output) => {
+                res.end(output)
+            })
+    }
 }
-
 
 var index = new IndexController()
 
 module.exports = (router) => {
-    router.get('/', (req, res, next) => { index.get(req, res, next) })
+    router.get('/', index.get)
     router.post('/', index.post)
-    router.all(render)
+    router.all('/', render)
 }
