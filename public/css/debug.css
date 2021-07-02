@@ -1,0 +1,8 @@
+/**
+ * @file
+ * Debug styles.
+ */
+
+div#debug-panel p {
+	margin: 2px;
+}

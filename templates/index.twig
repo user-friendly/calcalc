@@ -1,50 +1,36 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title>Calorie Calculator | Homepage</title>
-    
-    <link href="https://fonts.googleapis.com/css?family=Baloo+Tamma" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/base.css" />
-    <link rel="icon" sizes="192x192" href="/images/gear-icons-192x192.png" />
-</head>
-<body>
-	<main>
-		<div>
-			<h1>Calorie Calculator</h1>
-		</div>
-		<div>
-            <form id="calcalc-parser" name="form-parser" method="POST" enctype="application/x-www-form-urlencoded">
-                <textarea id="calcalc-parser-text" name="text" rows="10" cols="50">{{ form_text }}</textarea>
-                <input id="calcalc-parser-submit" name="submit" type="submit" name="Parse" />
-			</form>
-		</div>
-		{%  if records|length > 0 %}
-		<div>
-		    <table id="calcalc-parsed-data">
-		      <thead>
-		          <tr>
-		              <td>Name</td>
-		              <td>Energy (cal)</td>
-		              <td>Quantity</td>
-		          </tr>
-		      </thead>
-		      <tbody>
-    		      {% for record in records %}
-    		      <tr>
-    		          <td>{{ record.label }}</td>
-    		          <td>{{ record.energy }}</td>
-    		          <td>{{ record.quantity }}</td>
-    		      </tr>
-    		      {% endfor %}
-    		      <tr>
-    		          <td class="aggregate">Total energy</td>
-    		          <td class="aggregate" colspan="2">{{ total }}
-    		      </tr>
-		      </tbody>
-		    </table>
-		</div>
-		{% endif %}
-	</main>
-</body>
-</html>
+{% extends "html.twig" %}
+
+{% block content %}
+<div>
+    <form id="calcalc-parser" name="form-parser" method="POST" enctype="application/x-www-form-urlencoded">
+        <textarea id="calcalc-parser-text" name="text" rows="10" cols="50">{{ form_text }}</textarea>
+        <input id="calcalc-parser-submit" name="submit" type="submit" value="Record" />
+	</form>
+</div>
+{%  if records|length > 0 %}
+<div>
+    <table id="calcalc-parsed-data">
+      <thead>
+          <tr>
+              <td>Name</td>
+              <td>Energy (cal)</td>
+              <td>Quantity</td>
+          </tr>
+      </thead>
+      <tbody>
+	      {% for record in records %}
+	      <tr>
+	          <td>{{ record.label }}</td>
+	          <td>{{ record.energy }}</td>
+	          <td>{{ record.quantity }}</td>
+	      </tr>
+	      {% endfor %}
+	      <tr>
+	          <td class="aggregate">Total energy</td>
+	          <td class="aggregate" colspan="2">{{ total }}
+	      </tr>
+      </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}

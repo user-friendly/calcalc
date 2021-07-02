@@ -19,6 +19,13 @@ const render = (req, res, next) => {
         res.status(400).send('Bad Request')
     }
     else {
+        if (!res.locals.templateContext) {
+            res.locals.templateContext = {}
+        }
+        if (process.env.NODE_ENV === 'development') {
+            res.locals.templateContext.debug = true
+        }
+        
         twing
             .render('index.twig', res.locals.templateContext)
             .then((output) => {

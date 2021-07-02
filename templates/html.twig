@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="utf-8" />
+    <title>Calorie Calculator | {% block title %}Homepage{% endblock %}</title>
+    
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Tamma" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="icon" sizes="192x192" href="/images/gear-icons-192x192.png" />
+    
+    {% if debug %}
+    <link rel="stylesheet" href="/css/debug.css" />
+    <script type="text/javascript">
+    function printMessage(msg) {
+        console.log(msg)
+        document.querySelector('div#debug-panel')
+            .innerHTML += '<p>' + msg + '</p>'
+    }
+    // Alternative to load event
+    document.onreadystatechange = function () {
+        if (document.readyState === 'complete') {
+            printMessage('DPR: ' + window.devicePixelRatio)
+        }
+    }
+    </script>
+    {% endif %}
+    {% endblock %}
+</head>
+<body>
+    {% if debug %}{% block debug %}
+    <div id="debug-panel">
+        <p>You're not supposed to see this!</p>
+    </div>
+    {% endblock %}{% endif %}
+    <main>
+        <div id="header">
+        {% block header %}
+            <h1>Calorie Calculator</h1>
+        {% endblock %}
+        </div><!-- #header -->
+        
+        <div id="content">
+        {% block content %}
+            <div>
+                <form id="calcalc-parser" name="form-parser" method="POST" enctype="application/x-www-form-urlencoded">
+                    <textarea id="calcalc-parser-text" name="text" rows="10" cols="50">{{ form_text }}</textarea>
+                    <input id="calcalc-parser-submit" name="submit" type="submit" value="Record" />
+                </form>
+            </div>
+            {%  if records|length > 0 %}
+            <div>
+                <table id="calcalc-parsed-data">
+                  <thead>
+                      <tr>
+                          <td>Name</td>
+                          <td>Energy (cal)</td>
+                          <td>Quantity</td>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for record in records %}
+                      <tr>
+                          <td>{{ record.label }}</td>
+                          <td>{{ record.energy }}</td>
+                          <td>{{ record.quantity }}</td>
+                      </tr>
+                      {% endfor %}
+                      <tr>
+                          <td class="aggregate">Total energy</td>
+                          <td class="aggregate" colspan="2">{{ total }}
+                      </tr>
+                  </tbody>
+                </table>
+            </div>
+            {% endif %}
+        {% endblock %}
+        </div><!-- #content -->
+    </main>
+</body>
+</html>
