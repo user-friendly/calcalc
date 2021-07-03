@@ -42,6 +42,7 @@ let httpsOptions = {
 
 app.use('/css', express.static('public/css'))
 app.use('/images', express.static('public/images'))
+app.use('/react', express.static('react'))
 
 app.use(express.urlencoded({ extended: true }))
 

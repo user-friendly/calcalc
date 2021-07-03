@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="/css/base.css" />
     <link rel="icon" sizes="192x192" href="/images/gear-icons-192x192.png" />
     
+    {% block headStyles %}{% endblock %}
+    
+    {% block headScripts %}{% endblock %}
+    
+    
     {% if debug %}
     <link rel="stylesheet" href="/css/debug.css" />
     <script type="text/javascript">

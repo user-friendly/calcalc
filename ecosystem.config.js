@@ -3,7 +3,7 @@ module.exports = {
     name:           "calcalc",
     script:         "./app.js",
     watch:          true,
-    ignore_watch:   ['pm2', 'node_module', 'public', 'logs'],
+    ignore_watch:   ['pm2', 'node_module', 'public', 'logs', 'react'],
     
     exp_backoff_restart_delay: 100,
     
