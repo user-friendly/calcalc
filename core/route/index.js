@@ -3,12 +3,44 @@
  * Index router.
  */
 
-'use strict';
+'use strict'
 
 const express = require('express')
 const router = express.Router()
-const index = require('../middleware/index')
 
-index(router)
+const IndexController = require('../controller/index')
+
+// Render engine setup.
+const {TwingEnvironment, TwingLoaderFilesystem} = require('twing')
+const ListParser = require('../ListParser')
+
+let loader = new TwingLoaderFilesystem(__dirname + '/../../templates')
+let twing = new TwingEnvironment(loader)
+
+const render = (req, res, next) => {
+    if (!['GET', 'POST'].includes(req.method)) {
+        res.status(400).send('Bad Request')
+    }
+    else {
+        if (!res.locals.templateContext) {
+            res.locals.templateContext = {}
+        }
+        if (process.env.NODE_ENV === 'development') {
+            res.locals.templateContext.debug = true
+        }
+        
+        twing
+            .render('index.twig', res.locals.templateContext)
+            .then((output) => {
+                res.end(output)
+            })
+    }
+}
+
+var index = new IndexController()
+
+router.get('/', index.get)
+router.post('/', index.post)
+router.all('/', render)
 
 module.exports = router

@@ -34,7 +34,6 @@ Process information:
     console.log(debugInfo)
 }
 
-
 let httpsOptions = {
   key: fs.readFileSync('./sslcert/calcalc.key'),
   cert: fs.readFileSync('./sslcert/calcalc.crt')
